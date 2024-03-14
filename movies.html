@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            background-color: #132701;
+            color: white;
+        }
+        body{
+            background-color: #131720;
+            font-family: sans-serif;
+        }
+        h3{
+            color: white;
+        }
+        #query{
+            float: right;
+            margin: 0;
+        }
+        .topnav{
+            align-items: center;
+            overflow: hidden;
+        }
+        .topnav a{
+            text-decoration: none;
+        }
+        .card{
+            float: left;
+            padding: 10PX;
+        }
+        img{
+            height: 350px;
+            width: 300px;
+            border-radius: 19px;
+        }
+        .row{
+            display: flex;
+            flex-direction: row;
+            float: right;
+            align-items: center;
+        }
+        .column{
+            float: left;
+            width: 25%;
+            padding: 10px 10px;
+        }
+        .card{
+            border-radius: 19px;
+            padding: 15px;
+            text-align: center;
+            background-color: #151f30;
+        }
+    </style>
+</head>
+<body>
+    <div class="topnav">
+        <a href="#">Movies Site</a>
+    <form action="" id="form">
+        <input type="text" id="query" placeholder="search....">
+    </form>
+    </div>
+    <section id="main">
+        <!-- <div class="row">
+            <div class="column">
+                <div class="card">
+                    <center class="center"><img src="maryam.jpg" alt="here is a picture" class="img"></center>
+                    <h3 class="title">Movies</h3>
+                </div>
+            </div>
+        </div> -->
+    </section>
+    <script>
+const APILINK = "https://api.themoviedb.org/3/movie/11?api_key=fdf5ee33a21f6f9aa9b3053d1343afb9"
+const IMG_PATH = 'https://image.tmdb.org/t/p/original'
+const SEARCHAPI = 'https://api.themoviedb.org/3/search/movie?api_key=fdf5ee33a21f6f9aa9b3053d1343afb9&query='
+const main = document.getElementById('main')
+const form = document.getElementById('form')
+const search = document.getElementById('query')
+requestMovies(APILINK)
+ function requestMovies(url){
+    fetch(url).then(res => res.json())
+    .then(function(data){
+        console.log(data.results)
+        if(data && data.results){
+        data.results.forEach(element => {
+            const div_card = document.createElement('div')
+            div_card.setAttribute('class','card')
+            const div_row = document.createElement('div')
+            div_row.setAttribute('class','row')
+            const div_column = document.createElement('div')
+            div_column.setAttribute('class','column')
+            const image = document.createElement('img')
+            image.setAttribute('class','img')
+            const title = document.createElement('h3')
+            title.setAttribute('class','title')
+            const center = document.createElement('center')
+            center.setAttribute('class','center')
+            title.innerHTML = `${element.title}`
+            image.src = IMG_PATH + element.poster_path;
+            center.appendChild(image)
+            div_card.appendChild(title)
+            div_card.appendChild(center)
+            div_row.appendChild(div_column)
+             div_column.appendChild(div_card)
+            main.appendChild(div_row)
+        })
+    }
+    })
+    .catch(error => {
+            console.error('Error fetching data:', error); // Log fetch errors
+        });
+ }
+ form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const searchItem = search.value.trim(); // Trim whitespace
+    if (searchItem) {
+        main.innerHTML = '';
+        requestMovies(SEARCHAPI + encodeURIComponent(searchItem)); // Add query parameter
+        search.value = '';
+    } else {
+        console.log('Please enter a search query');
+    }
+});
+    </script>
+</body>
+</html>
